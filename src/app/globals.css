@@ -1,1 +1,112 @@
 @import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../../.flowbite-react/class-list.json";
+
+:root {
+  --button-height: 3rem;
+  --color-text: rgba(0, 0, 0, 0.25);
+  --color-text-shadow: rgba(255, 255, 255, 0.15);
+  --color-page-bg: #b9b5aa;
+  --color-bg: #899095;
+  --color-bg-light: #969da3;
+  --color-bg-dark: #7d878f;
+  --color-overlay-light: rgba(255, 255, 255, 0.2);
+  --color-overlay-medium: rgba(0, 0, 0, 0.1);
+  --color-overlay-dark: rgba(0, 0, 0, 0.2);
+  --color-tab-focus: rgba(255, 255, 255, 0.15);
+}
+
+.red-button {
+  --color-bg: #e44e55;
+  --color-bg-light: #e47479;
+  --color-bg-dark: #d13239;
+}
+
+.yellow-button {
+  --color-bg: #ffc054;
+  --color-bg-light: #ffd996;
+  --color-bg-dark: #f2aa30;
+}
+
+.blue-button {
+  --color-bg: #0066b4;
+  --color-bg-light: #3981ca;
+  --color-bg-dark: #004ead;
+}
+
+.green-button {
+  --color-bg: #00a07d;
+  --color-bg-light: #00af8a;
+  --color-bg-dark: #008f70;
+}
+
+.retro-button {
+  position: relative;
+  appearance: none;
+  box-sizing: border-box;
+  font-size: calc(var(--button-height) / 3);
+  font-family: "Open Sans", sans-serif;
+  background: var(--color-bg);
+  height: var(--button-height);
+  min-width: var(--button-height);
+  border-radius: calc(var(--button-height) / 2);
+  border: 0;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-shadow: 1px 1px var(--color-text-shadow);
+  cursor: pointer;
+  margin: 6px;
+  letter-spacing: 0.1em;
+  transition: all 200ms ease;
+  box-shadow: -1px -1px 1px var(--color-bg), 0 0 0 4px var(--color-overlay-medium), 1px 1px 1px var(--color-bg-dark), inset 0 0 0 var(--color-overlay-dark), inset 0.5rem 0.5rem 0.25rem var(--color-bg-light);
+}
+
+.retro-button:focus,
+.retro-button:hover {
+  box-shadow: -1px -1px 1px var(--color-bg-dark), 0 0 0 4px var(--color-tab-focus), 1px 1px 1px var(--color-bg-dark), inset 0 0 0 var(--color-overlay-dark), inset 0.5rem 0.5rem 0.25rem var(--color-bg-light);
+}
+
+.retro-button:active {
+  box-shadow: inset 1px 1px 1px var(--color-bg), 0 0 0 4px var(--color-overlay-dark), inset -1px -1px 1px var(--color-bg-light), inset 0.5rem 0.5rem 0.75rem var(--color-bg-dark), inset 0.5rem 0.5rem 0.5rem var(--color-bg-light);
+}
+
+/* container do “controle” */
+.bottom-button-group {
+  position: relative;
+  width: 16rem; /* ajustável */
+  height: 16rem; /* ajustável */
+  background: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: -1px -1px 1px var(--color-bg-light), inset -1px -1px 1px var(--color-bg-dark);
+}
+
+.button-grid {
+  display: grid;
+  position: relative;
+  border-radius: 1rem;
+  background: var(--color-bg);
+  box-shadow: -1px -1px 1px var(--color-bg-light), inset -1px -1px 1px var(--color-bg-dark);
+
+  /* define 3 linhas x 3 colunas, e nomeia 4 áreas */
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 1fr auto 1fr;
+  grid-template-areas:
+    ".   A   ."
+    "B   .   Y"
+    ".   X   .";
+}
+
+/* liga cada área a um componente */
+.A-button {
+  grid-area: A;
+}
+.B-button {
+  grid-area: B;
+}
+.X-button {
+  grid-area: X;
+}
+.Y-button {
+  grid-area: Y;
+}
