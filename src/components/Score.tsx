@@ -39,15 +39,13 @@ export function Score() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-2">
-      <div className="flex flex-col items-center justify-center gap-2">
-        {showAlert && <AlertComponent message="Moedas coletadas!" />}
-        <div className="text-lg font-semibold text-center">
-          <span className="text-yellow-400 dark:text-yellow-200">
-            <GiTwoCoins size={20} />
-          </span>
-          <span className="text-yellow-400 dark:text-yellow-200">{score}</span>
-        </div>
+    <div className="w-full flex items-center justify-center">
+      {showAlert && <AlertComponent message="Moedas coletadas!" />}
+      <div className="text-lg font-semibold text-center flex items-center gap-2">
+        <span className="text-yellow-400 dark:text-yellow-200">
+          <GiTwoCoins size={20} />
+        </span>
+        <span className="text-yellow-400 dark:text-yellow-200">{score}</span>
       </div>
     </div>
   );

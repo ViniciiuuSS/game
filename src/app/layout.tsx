@@ -3,7 +3,6 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { NavbarComponent } from "@/components/navbar";
 import { ThemeProvider } from "flowbite-react";
-import { Score } from "@/components/Score";
 
 export default function RootLayout({
   children,
@@ -20,13 +19,7 @@ export default function RootLayout({
           <ThemeProvider>
             <div className="min-h-screen flex flex-col">
               <NavbarComponent />
-              <Score />
-              <div className="flex-grow flex flex-col">
-                <div className="w-full bg-gray-100 dark:bg-gray-800 py-2">
-                  <Score />
-                </div>
-                <main className="flex-grow flex items-center justify-center">{children}</main>
-              </div>
+              <main className="flex-grow flex items-center justify-center">{children}</main>
             </div>
           </ThemeProvider>
         </SessionProvider>
