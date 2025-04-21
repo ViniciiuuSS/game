@@ -110,3 +110,8 @@
 .Y-button {
   grid-area: Y;
 }
+
+::selection {
+  background-color: yellow;
+  color: black;
+}

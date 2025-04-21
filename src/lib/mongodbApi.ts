@@ -52,8 +52,6 @@ function generateId(): string {
 export async function findDocuments(database: string, collection: string, filter?: MongoFilter) {
   const url = `${MONGODB_CLUSTER_URL}/action/find`;
 
-  console.log("Buscando com filtro:", filter);
-
   const response = await fetch(url, {
     method: "POST",
     headers,
@@ -97,14 +95,11 @@ export async function insertDocument(database: string, collection: string, docum
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const data = await response.json();
   return { insertedId: id };
 }
 
 export async function updateDocument(database: string, collection: string, filter: MongoFilter, update: MongoUpdate): Promise<MongoUpdateResponse> {
   const url = `${MONGODB_CLUSTER_URL}/action/updateOne`;
-
-  console.log("Atualizando com filtro:", filter);
 
   const response = await fetch(url, {
     method: "POST",
