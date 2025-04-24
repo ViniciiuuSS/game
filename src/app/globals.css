@@ -62,6 +62,21 @@
   box-shadow: -1px -1px 1px var(--color-bg), 0 0 0 4px var(--color-overlay-medium), 1px 1px 1px var(--color-bg-dark), inset 0 0 0 var(--color-overlay-dark), inset 0.5rem 0.5rem 0.25rem var(--color-bg-light);
 }
 
+.text-retro{
+    font-size: calc(var(--button-height) / 3);
+    min-width: var(--button-height);
+    border-radius: calc(var(--button-height) / 2);
+    border: 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--color-text);
+    text-shadow: 1px 1px var(--color-text-shadow);
+    margin: 6px;
+    letter-spacing: 0.1em;
+    transition: all 200ms ease;
+    box-shadow: none;
+}
+
 .retro-button:focus,
 .retro-button:hover {
   box-shadow: -1px -1px 1px var(--color-bg-dark), 0 0 0 4px var(--color-tab-focus), 1px 1px 1px var(--color-bg-dark), inset 0 0 0 var(--color-overlay-dark), inset 0.5rem 0.5rem 0.25rem var(--color-bg-light);
@@ -71,7 +86,13 @@
   box-shadow: inset 1px 1px 1px var(--color-bg), 0 0 0 4px var(--color-overlay-dark), inset -1px -1px 1px var(--color-bg-light), inset 0.5rem 0.5rem 0.75rem var(--color-bg-dark), inset 0.5rem 0.5rem 0.5rem var(--color-bg-light);
 }
 
-/* container do “controle” */
+.retro-button:disabled {
+  --color-bg: #899095;
+  --color-bg-light: #969da3;
+  --color-bg-dark: #7d878f;
+}
+
+/* container do "controle" */
 .bottom-button-group {
   position: relative;
   width: 16rem; /* ajustável */
@@ -96,6 +117,18 @@
     "B   .   Y"
     ".   X   .";
 }
+
+.button-shop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 1rem;
+  background: var(--color-bg);
+  box-shadow: -1px -1px 1px var(--color-bg-light), inset -1px -1px 1px var(--color-bg-dark);
+}
+
 
 /* liga cada área a um componente */
 .A-button {

@@ -4,11 +4,12 @@ import { insertDocument, updateDocument, findDocuments } from "@/lib/mongodbApi"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id } = body;
+    const { score, id, statusButtons } = body;
 
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
+        statusButtons: statusButtons,
       });
 
       return NextResponse.json({
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
       }
 
-      await updateDocument("Game", "score", { _id: id }, { score: score });
+      await updateDocument("Game", "score", { _id: id }, { score: score, statusButtons: statusButtons });
 
       return NextResponse.json({
         success: true,
@@ -40,10 +41,11 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id } = body;
+    const { score, id, statusButtons } = body;
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
+        statusButtons: statusButtons,
       });
 
       return NextResponse.json({
@@ -58,7 +60,10 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
       }
 
-      await updateDocument("Game", "score", { _id: id }, { score: score });
+      await updateDocument("Game", "score", { _id: id }, { 
+        score: score,
+        statusButtons: statusButtons 
+      });
 
       return NextResponse.json({
         success: true,
@@ -91,6 +96,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       id: document._id,
       score: document.score,
+      statusButtons: document.statusButtons,
     });
   } catch (error) {
     console.error("Erro ao buscar documento:", error);

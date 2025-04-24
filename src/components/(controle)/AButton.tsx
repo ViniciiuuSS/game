@@ -3,13 +3,13 @@
 import { useGameStore } from "@/store/gameStore";
 
 export default function AButton() {
-  const { score, setScore } = useGameStore();
+  const { score, setScore, envButtons } = useGameStore();
 
   return (
     <button
       className="retro-button red-button A-button"
       onClick={() => {
-        setScore(score + 1);
+        setScore(score + envButtons.A);
       }}
     >
       A

@@ -1,6 +1,12 @@
 // Define MongoDB document interface
 interface MongoDocument {
   score: number;
+  statusButtons: {
+    A: boolean;
+    B: boolean;
+    X: boolean;
+    Y: boolean;
+  };
 }
 
 // Define MongoDB filter interface
@@ -11,6 +17,12 @@ interface MongoFilter {
 // Define MongoDB update interface
 interface MongoUpdate {
   score: number;
+  statusButtons: {
+    A: boolean;
+    B: boolean;
+    X: boolean;
+    Y: boolean;
+  };
 }
 
 // Define MongoDB response interfaces
@@ -87,6 +99,7 @@ export async function insertDocument(database: string, collection: string, docum
       document: {
         _id: id,
         score: document.score,
+        statusButtons: document.statusButtons,
       },
     }),
   });
@@ -101,6 +114,8 @@ export async function insertDocument(database: string, collection: string, docum
 export async function updateDocument(database: string, collection: string, filter: MongoFilter, update: MongoUpdate): Promise<MongoUpdateResponse> {
   const url = `${MONGODB_CLUSTER_URL}/action/updateOne`;
 
+  console.log('Dados recebidos para update:', { filter, update });
+
   const response = await fetch(url, {
     method: "POST",
     headers,
@@ -109,7 +124,17 @@ export async function updateDocument(database: string, collection: string, filte
       database,
       collection,
       filter: filter || {},
-      update: { $set: { score: update.score } },
+      update: { 
+        $set: { 
+          score: update.score,
+          statusButtons: {
+            A: update.statusButtons.A,
+            B: update.statusButtons.B,
+            X: update.statusButtons.X,
+            Y: update.statusButtons.Y
+          }
+        } 
+      },
     }),
   });
 
@@ -118,6 +143,7 @@ export async function updateDocument(database: string, collection: string, filte
   }
 
   const data = await response.json();
+  console.log('Resposta do MongoDB:', data);
   return data;
 }
 
