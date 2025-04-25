@@ -33,6 +33,18 @@ interface GameStore {
     "X": boolean;
     "Y": boolean;
   };
+  statusAutoButtons: {
+    "A": boolean;
+    "B": boolean;
+    "X": boolean;
+    "Y": boolean;
+  };
+  buttonAutoInterval: {
+    "A": number;
+    "B": number;
+    "X": number;
+    "Y": number;
+  };
   setScore: (score: number) => void;
   setId: (id: string) => void;
   loadScore: (id: string) => Promise<void>;
@@ -40,14 +52,21 @@ interface GameStore {
   startAutoSave: () => void;
   stopAutoSave: () => void;
   aumentarColetas: (button: string) => void;
+  automatizarColetas: (button:string, load: boolean) => void;
   setStatusButtons: (statusButtons: { [key: string]: boolean; }) => void;
+  setAutoButtons: (button: "A" | "B" | "X" | "Y", load: boolean) => void;
 }
 
 let autoSaveInterval: NodeJS.Timeout | null = null;
+let autoInterval: NodeJS.Timeout | null = null;
 
-const dispatchAutoSaveEvent = () => {
+const dispatchAutoSaveEvent = (type:string ) => {
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new Event("autosave"));
+    switch(type){
+      case "autosave":
+        window.dispatchEvent(new Event("autosave"));
+        break;
+    }
   }
 };
 
@@ -62,6 +81,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   statusButtons: {
     "A": true,
+    "B": false,
+    "X": false,
+    "Y": false,
+  },
+  statusAutoButtons: {
+    "A": false,
     "B": false,
     "X": false,
     "Y": false,
@@ -84,6 +109,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     "X": 2000,
     "Y": 1500,
   },
+  buttonAutoInterval: {
+    "A": 700,
+    "B": 1400,
+    "X": 2800,
+    "Y": 5600,
+  },
   setId: (id: string) => set({ id }),
 
   loadScore: async (id: string) => {
@@ -98,7 +129,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
         throw new Error("Falha ao carregar score");
       }
       const data = await response.json();
-      set({ score: data.score, id: data.id, lastSavedScore: data.score, statusButtons: data.statusButtons });
+      set({ score: data.score, id: data.id, lastSavedScore: data.score, statusButtons: data.statusButtons, statusAutoButtons: data.statusAutoButtons });
+      const store = get();
+      const statusAutoButtons = store.statusAutoButtons;
+      Object.keys(statusAutoButtons).forEach((key) => {
+        console.log(key)
+        const newStatus = statusAutoButtons[key as keyof typeof statusAutoButtons];
+        
+        if (newStatus === true) {
+          store.automatizarColetas(key, true);
+        }        
+      })
     } catch (error) {
       console.error("Erro ao carregar score:", error);
     }
@@ -106,7 +147,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   saveScore: async (saveStatusButtons: boolean = false) => {
     const store = get();
-    const { score, id, lastSavedScore, statusButtons } = store;
+    const { score, id, lastSavedScore, statusButtons, statusAutoButtons } = store;
 
     if ((score === lastSavedScore && id) || !saveStatusButtons) return;
 
@@ -114,9 +155,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       score,
       id,
       statusButtons: saveStatusButtons ? statusButtons : undefined,
+      statusAutoButtons: saveStatusButtons ? statusAutoButtons : undefined
     };
-
-    console.log('Dados sendo enviados para o banco:', payload);
 
     try {
       const response = await fetch("/storege", {
@@ -132,7 +172,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
 
       const data = await response.json();
-      console.log('Resposta do servidor:', data);
 
       if (!id && data.id) {
         set({ id: data.id });
@@ -141,7 +180,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ lastSavedScore: score });
 
       if (id) {
-        dispatchAutoSaveEvent();
+        dispatchAutoSaveEvent("autosave");
       }
     } catch (error) {
       console.error("Erro ao salvar score:", error);
@@ -168,7 +207,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       autoSaveInterval = null;
     }
   },
-
+  stopAutoInterval: () => {
+    if (autoInterval) {
+      clearInterval(autoInterval);
+      autoInterval = null;
+    }
+  },
   setScore: (score: number) => {
     const store = get();
     set({ score });
@@ -190,6 +234,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ precoAumentarColetas });
     set({ score: store.score - keyPreco });
   },
+  automatizarColetas: (button: string, load:boolean = false) => 
+  {
+    const store = get();
+    store.setAutoButtons(button as "A" | "B" | "X" | "Y", load);
+  },
   setStatusButtons: (statusButtons: { [key: string]: boolean; }) => {
     const store = get();
     const statusButtonsStore = store.statusButtons;
@@ -201,7 +250,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       
       if (newStatus === true && currentStatus === false) {
         shouldSave = true;
-        console.log(`Botão ${key} está sendo habilitado pela primeira vez`);
       }
       
       statusButtonsStore[key as keyof typeof statusButtonsStore] = newStatus;
@@ -210,8 +258,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ statusButtons: statusButtonsStore });
 
     if (shouldSave) {
-      console.log('Status dos botões antes de salvar:', statusButtonsStore);
       store.saveScore(true);
+    }
+  },
+  setAutoButtons: (button: "A" | "B" | "X" | "Y", load: boolean) => {
+    let store = get();
+    if (!store.statusAutoButtons[button] || load) {
+      if(load){
+        setInterval(() => {
+          store = get();
+          store.score += store.envButtons[button];
+          set({ score: store.score });
+        }, store.buttonAutoInterval[button]);
+        return;
+      }
+      const precoAutomatizarColetas = store.precoAutomatizarColetas;
+      const keyPreco = precoAutomatizarColetas[button];
+  
+      if (store.score >= keyPreco) {
+        set({ score: store.score - keyPreco });
+  
+        store.statusAutoButtons[button] = true;
+        setInterval(() => {
+          store = get();
+          store.score += store.envButtons[button];
+          set({ score: store.score });
+        }, store.buttonAutoInterval[button]);
+        store.saveScore(true);
+      }
     }
   },
 }));

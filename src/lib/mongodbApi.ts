@@ -7,6 +7,12 @@ interface MongoDocument {
     X: boolean;
     Y: boolean;
   };
+  statusAutoButtons: {
+    A: boolean;
+    B: boolean;
+    X: boolean;
+    Y: boolean;
+  };
 }
 
 // Define MongoDB filter interface
@@ -18,6 +24,12 @@ interface MongoFilter {
 interface MongoUpdate {
   score: number;
   statusButtons: {
+    A: boolean;
+    B: boolean;
+    X: boolean;
+    Y: boolean;
+  };
+  statusAutoButtons: {
     A: boolean;
     B: boolean;
     X: boolean;
@@ -86,9 +98,8 @@ export async function findDocuments(database: string, collection: string, filter
 export async function insertDocument(database: string, collection: string, document: MongoDocument): Promise<MongoInsertResponse> {
   const url = `${MONGODB_CLUSTER_URL}/action/insertOne`;
 
-  // Gera um ID único simples
   const id = generateId();
-
+  
   const response = await fetch(url, {
     method: "POST",
     headers,
@@ -100,6 +111,7 @@ export async function insertDocument(database: string, collection: string, docum
         _id: id,
         score: document.score,
         statusButtons: document.statusButtons,
+        statusAutoButtons: document.statusAutoButtons
       },
     }),
   });
@@ -132,6 +144,12 @@ export async function updateDocument(database: string, collection: string, filte
             B: update.statusButtons.B,
             X: update.statusButtons.X,
             Y: update.statusButtons.Y
+          },
+          statusAutoButtons: {
+            A: update.statusAutoButtons.A,
+            B: update.statusAutoButtons.B,
+            X: update.statusAutoButtons.X,
+            Y: update.statusAutoButtons.Y
           }
         } 
       },

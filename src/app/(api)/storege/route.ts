@@ -4,12 +4,12 @@ import { insertDocument, updateDocument, findDocuments } from "@/lib/mongodbApi"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id, statusButtons } = body;
-
+    const { score, id, statusButtons, statusAutoButtons } = body;
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
         statusButtons: statusButtons,
+        statusAutoButtons: statusAutoButtons
       });
 
       return NextResponse.json({
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
       }
 
-      await updateDocument("Game", "score", { _id: id }, { score: score, statusButtons: statusButtons });
+      await updateDocument("Game", "score", { _id: id }, { score: score, statusButtons: statusButtons, statusAutoButtons: statusAutoButtons });
 
       return NextResponse.json({
         success: true,
@@ -41,17 +41,20 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id, statusButtons } = body;
+    const { score, id, statusButtons, statusAutoButtons } = body;
+    
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
         statusButtons: statusButtons,
+        statusAutoButtons: statusAutoButtons
       });
 
       return NextResponse.json({
         success: true,
         id: data.insertedId,
         score: score,
+        statusAutoButtons: statusAutoButtons
       });
     } else {
       const documents = await findDocuments("Game", "score", { _id: id });
@@ -62,7 +65,8 @@ export async function PUT(request: NextRequest) {
 
       await updateDocument("Game", "score", { _id: id }, { 
         score: score,
-        statusButtons: statusButtons 
+        statusButtons: statusButtons, 
+        statusAutoButtons: statusAutoButtons
       });
 
       return NextResponse.json({
@@ -97,6 +101,7 @@ export async function GET(request: NextRequest) {
       id: document._id,
       score: document.score,
       statusButtons: document.statusButtons,
+      statusAutoButtons: document.statusAutoButtons
     });
   } catch (error) {
     console.error("Erro ao buscar documento:", error);
