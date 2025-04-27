@@ -1,4 +1,4 @@
-![Screenshot do Idle Game](./src/app/favicon.ico)
+<img src="./src/app/favicon.ico" alt="Screenshot do Idle Game" width="100" height="100" />
 
 # 🕹️ Idle Game
 
