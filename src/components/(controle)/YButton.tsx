@@ -5,7 +5,7 @@ export default function YButton() {
   const { score, setScore, precoHabilitarColetas, envButtons, statusButtons, setStatusButtons } = useGameStore();
   return (
     <button
-      className="retro-button green-button Y-button"
+      className="retro-button add green-button Y-button"
       disabled={score < precoHabilitarColetas.Y && !statusButtons.Y}
       onClick={() => {
         const newScore = score + envButtons.Y;

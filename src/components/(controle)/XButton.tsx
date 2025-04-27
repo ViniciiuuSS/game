@@ -5,7 +5,7 @@ export default function XButton() {
   const { score, setScore, precoHabilitarColetas, envButtons, statusButtons, setStatusButtons } = useGameStore();
   return (
     <button
-      className="retro-button blue-button X-button"
+      className="retro-button add blue-button X-button"
       disabled={score < precoHabilitarColetas.X && !statusButtons.X}
       onClick={() => {
         const newScore = score + envButtons.X;

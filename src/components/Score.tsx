@@ -6,7 +6,7 @@ import { GiTwoCoins } from "react-icons/gi";
 import { AlertComponent } from "./alert";
 
 export function Score() {
-  const { score, id, loadScore, startAutoSave, stopAutoSave } = useGameStore();
+  const { score, id, loadGame, loadScore, startAutoSave, stopAutoSave } = useGameStore();
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
@@ -37,6 +37,10 @@ export function Score() {
       window.removeEventListener("autosave", handleAutoSave);
     };
   }, []);
+
+  if (!loadGame) {
+    return;
+  }
 
   return (
     <div className="w-full flex items-center justify-center">

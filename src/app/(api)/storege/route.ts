@@ -4,12 +4,17 @@ import { insertDocument, updateDocument, findDocuments } from "@/lib/mongodbApi"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id, statusButtons, statusAutoButtons } = body;
+    const { score, id, statusButtons, statusAutoButtons, envButtons, precoAumentarColetas, precoAutomatizarColetas, buttonAutoInterval } = body;
+
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
         statusButtons: statusButtons,
-        statusAutoButtons: statusAutoButtons
+        statusAutoButtons: statusAutoButtons,
+        envButtons: envButtons,
+        precoAumentarColetas: precoAumentarColetas,
+        precoAutomatizarColetas: precoAutomatizarColetas,
+        buttonAutoInterval: buttonAutoInterval,
       });
 
       return NextResponse.json({
@@ -24,7 +29,20 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
       }
 
-      await updateDocument("Game", "score", { _id: id }, { score: score, statusButtons: statusButtons, statusAutoButtons: statusAutoButtons });
+      await updateDocument(
+        "Game",
+        "score",
+        { _id: id },
+        {
+          score: score,
+          statusButtons: statusButtons,
+          statusAutoButtons: statusAutoButtons,
+          envButtons: envButtons,
+          precoAumentarColetas: precoAumentarColetas,
+          precoAutomatizarColetas: precoAutomatizarColetas,
+          buttonAutoInterval: buttonAutoInterval,
+        }
+      );
 
       return NextResponse.json({
         success: true,
@@ -41,20 +59,28 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { score, id, statusButtons, statusAutoButtons } = body;
-    
+    const { score, id, statusButtons, statusAutoButtons, envButtons, precoAumentarColetas, precoAutomatizarColetas, buttonAutoInterval } = body;
+
     if (!id) {
       const data = await insertDocument("Game", "score", {
         score: score,
         statusButtons: statusButtons,
-        statusAutoButtons: statusAutoButtons
+        statusAutoButtons: statusAutoButtons,
+        envButtons: envButtons,
+        precoAumentarColetas: precoAumentarColetas,
+        precoAutomatizarColetas: precoAutomatizarColetas,
+        buttonAutoInterval: buttonAutoInterval,
       });
 
       return NextResponse.json({
         success: true,
         id: data.insertedId,
         score: score,
-        statusAutoButtons: statusAutoButtons
+        statusAutoButtons: statusAutoButtons,
+        envButtons: envButtons,
+        precoAumentarColetas: precoAumentarColetas,
+        precoAutomatizarColetas: precoAutomatizarColetas,
+        buttonAutoInterval: buttonAutoInterval,
       });
     } else {
       const documents = await findDocuments("Game", "score", { _id: id });
@@ -63,11 +89,20 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
       }
 
-      await updateDocument("Game", "score", { _id: id }, { 
-        score: score,
-        statusButtons: statusButtons, 
-        statusAutoButtons: statusAutoButtons
-      });
+      await updateDocument(
+        "Game",
+        "score",
+        { _id: id },
+        {
+          score: score,
+          statusButtons: statusButtons,
+          statusAutoButtons: statusAutoButtons,
+          envButtons: envButtons,
+          precoAumentarColetas: precoAumentarColetas,
+          precoAutomatizarColetas: precoAutomatizarColetas,
+          buttonAutoInterval: buttonAutoInterval,
+        }
+      );
 
       return NextResponse.json({
         success: true,
@@ -101,7 +136,11 @@ export async function GET(request: NextRequest) {
       id: document._id,
       score: document.score,
       statusButtons: document.statusButtons,
-      statusAutoButtons: document.statusAutoButtons
+      statusAutoButtons: document.statusAutoButtons,
+      envButtons: document.envButtons,
+      precoAumentarColetas: document.precoAumentarColetas,
+      precoAutomatizarColetas: document.precoAutomatizarColetas,
+      buttonAutoInterval: document.buttonAutoInterval,
     });
   } catch (error) {
     console.error("Erro ao buscar documento:", error);

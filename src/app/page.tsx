@@ -13,7 +13,7 @@ export default async function HomePage() {
       </div>
     );
   }
-
+  
   return (
     <div className="flex flex-col items-center justify-center ">
       <Main />

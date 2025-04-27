@@ -13,6 +13,30 @@ interface MongoDocument {
     X: boolean;
     Y: boolean;
   };
+  envButtons: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  precoAumentarColetas: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  precoAutomatizarColetas: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  buttonAutoInterval: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
 }
 
 // Define MongoDB filter interface
@@ -34,6 +58,30 @@ interface MongoUpdate {
     B: boolean;
     X: boolean;
     Y: boolean;
+  };
+  envButtons: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  precoAumentarColetas: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  precoAutomatizarColetas: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
+  };
+  buttonAutoInterval: {
+    A: number;
+    B: number;
+    X: number;
+    Y: number;
   };
 }
 
@@ -99,7 +147,7 @@ export async function insertDocument(database: string, collection: string, docum
   const url = `${MONGODB_CLUSTER_URL}/action/insertOne`;
 
   const id = generateId();
-  
+
   const response = await fetch(url, {
     method: "POST",
     headers,
@@ -111,7 +159,11 @@ export async function insertDocument(database: string, collection: string, docum
         _id: id,
         score: document.score,
         statusButtons: document.statusButtons,
-        statusAutoButtons: document.statusAutoButtons
+        statusAutoButtons: document.statusAutoButtons,
+        envButtons: document.envButtons,
+        precoAumentarColetas: document.precoAumentarColetas,
+        precoAutomatizarColetas: document.precoAutomatizarColetas,
+        buttonAutoInterval: document.buttonAutoInterval,
       },
     }),
   });
@@ -126,7 +178,7 @@ export async function insertDocument(database: string, collection: string, docum
 export async function updateDocument(database: string, collection: string, filter: MongoFilter, update: MongoUpdate): Promise<MongoUpdateResponse> {
   const url = `${MONGODB_CLUSTER_URL}/action/updateOne`;
 
-  console.log('Dados recebidos para update:', { filter, update });
+  console.log("Dados recebidos para update:", { filter, update });
 
   const response = await fetch(url, {
     method: "POST",
@@ -136,22 +188,46 @@ export async function updateDocument(database: string, collection: string, filte
       database,
       collection,
       filter: filter || {},
-      update: { 
-        $set: { 
+      update: {
+        $set: {
           score: update.score,
           statusButtons: {
             A: update.statusButtons.A,
             B: update.statusButtons.B,
             X: update.statusButtons.X,
-            Y: update.statusButtons.Y
+            Y: update.statusButtons.Y,
           },
           statusAutoButtons: {
             A: update.statusAutoButtons.A,
             B: update.statusAutoButtons.B,
             X: update.statusAutoButtons.X,
-            Y: update.statusAutoButtons.Y
-          }
-        } 
+            Y: update.statusAutoButtons.Y,
+          },
+          envButtons: {
+            A: update.envButtons.A,
+            B: update.envButtons.B,
+            X: update.envButtons.X,
+            Y: update.envButtons.Y,
+          },
+          precoAumentarColetas: {
+            A: update.precoAumentarColetas.A,
+            B: update.precoAumentarColetas.B,
+            X: update.precoAumentarColetas.X,
+            Y: update.precoAumentarColetas.Y,
+          },
+          precoAutomatizarColetas: {
+            A: update.precoAutomatizarColetas.A,
+            B: update.precoAutomatizarColetas.B,
+            X: update.precoAutomatizarColetas.X,
+            Y: update.precoAutomatizarColetas.Y,
+          },
+          buttonAutoInterval: {
+            A: update.buttonAutoInterval.A,
+            B: update.buttonAutoInterval.B,
+            X: update.buttonAutoInterval.X,
+            Y: update.buttonAutoInterval.Y,
+          },
+        },
       },
     }),
   });
@@ -161,7 +237,7 @@ export async function updateDocument(database: string, collection: string, filte
   }
 
   const data = await response.json();
-  console.log('Resposta do MongoDB:', data);
+  console.log("Resposta do MongoDB:", data);
   return data;
 }
 

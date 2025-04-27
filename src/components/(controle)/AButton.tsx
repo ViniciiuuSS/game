@@ -7,7 +7,7 @@ export default function AButton() {
 
   return (
     <button
-      className="retro-button red-button A-button"
+      className="retro-button add red-button A-button"
       onClick={() => {
         setScore(score + envButtons.A);
       }}
