@@ -11,9 +11,9 @@ import { SpinnerComponent } from "./spinner";
 import { BadgeComponent } from "./badge";
 
 export default function Main() {
-  const { loadGame } = useGameStore();
+  const { id } = useGameStore();
 
-  if (!loadGame) {
+  if (!id) {
     return <SpinnerComponent />;
   }
 

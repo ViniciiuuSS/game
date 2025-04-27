@@ -6,7 +6,7 @@ import { GiTwoCoins } from "react-icons/gi";
 import { AlertComponent } from "./alert";
 
 export function Score() {
-  const { score, id, loadGame, loadScore, startAutoSave, stopAutoSave } = useGameStore();
+  const { score, id, loadScore, startAutoSave, stopAutoSave } = useGameStore();
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function Score() {
     };
   }, []);
 
-  if (!loadGame) {
+  if (!id) {
     return;
   }
 
